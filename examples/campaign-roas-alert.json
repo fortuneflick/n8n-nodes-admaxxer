@@ -1,0 +1,134 @@
+{
+  "name": "Alert on campaigns spending without return, from Admaxxer",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## Campaign ROAS alert\nEvery morning, list campaigns in an ad account for the last 7 days and keep the ones that spent more than 50 with ROAS under 1. Pick your ad account in the Campaigns node, then add a Slack or email node.",
+        "width": 380,
+        "height": 260
+      },
+      "id": "bde980fb-fb58-545f-8e7f-bedd114c0e03",
+      "name": "Note ## Campaign ",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -60,
+        -300
+      ]
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 8
+            }
+          ]
+        }
+      },
+      "id": "96887b5f-e97e-5454-84dd-4058dab19dac",
+      "name": "Every morning",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "campaign",
+        "operation": "getAll",
+        "connectionId": "",
+        "returnAll": true,
+        "options": {}
+      },
+      "id": "70e7bd36-53aa-5a7f-bf39-c5381b575dc8",
+      "name": "Campaigns",
+      "type": "n8n-nodes-admaxxer.admaxxer",
+      "typeVersion": 1,
+      "position": [
+        220,
+        0
+      ],
+      "credentials": {
+        "admaxxerApi": {
+          "id": "",
+          "name": "Admaxxer account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose"
+          },
+          "conditions": [
+            {
+              "id": "r1",
+              "leftValue": "={{ $json.spend }}",
+              "rightValue": 50,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            },
+            {
+              "id": "r2",
+              "leftValue": "={{ $json.roas ?? 0 }}",
+              "rightValue": 1,
+              "operator": {
+                "type": "number",
+                "operation": "lt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "e037c666-d591-59a7-b46a-2c22fc7d7d18",
+      "name": "Spending without return",
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        440,
+        0
+      ]
+    }
+  ],
+  "connections": {
+    "Every morning": {
+      "main": [
+        [
+          {
+            "node": "Campaigns",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Campaigns": {
+      "main": [
+        [
+          {
+            "node": "Spending without return",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": false
+  }
+}

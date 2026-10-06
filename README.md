@@ -61,6 +61,13 @@ Built with `@n8n/node-cli` 0.51 for the n8n 1.x and 2.x node API (`n8nNodesApiVe
 
 **When a request is refused**, the error shows Admaxxer's message and the fix it suggests.
 
+## Example workflows
+
+Import any of these in n8n (**Workflows → Import from File**), then pick your credential in each node:
+
+* [Alert on campaigns spending without return, from Admaxxer](examples/campaign-roas-alert.json)
+* [Weekly marketing KPI and attribution report from Admaxxer](examples/weekly-kpi-report.json)
+
 ## Resources
 
 * [n8n community nodes documentation](https://docs.n8n.io/integrations/#community-nodes)

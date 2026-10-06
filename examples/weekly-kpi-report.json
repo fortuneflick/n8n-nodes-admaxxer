@@ -1,0 +1,123 @@
+{
+  "name": "Weekly marketing KPI and attribution report from Admaxxer",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## Weekly marketing report\nEvery Monday: last week's sales, profit, blended ROAS and orders, plus revenue and ROAS per channel. Add Slack, email or Google Sheets at the end.",
+        "width": 380,
+        "height": 260
+      },
+      "id": "98811066-67fb-5b5c-a387-ab7fd36dc5d7",
+      "name": "Note ## Weekly ma",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -60,
+        -300
+      ]
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "weeks",
+              "triggerAtDay": [
+                1
+              ],
+              "triggerAtHour": 9
+            }
+          ]
+        }
+      },
+      "id": "f7a0a7bf-b339-5ab1-91db-0abec057e095",
+      "name": "Every Monday",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "analytics",
+        "operation": "getSummary",
+        "options": {
+          "dateFrom": "={{ $now.minus({ days: 7 }).toISODate() }}",
+          "dateTo": "={{ $now.minus({ days: 1 }).toISODate() }}"
+        }
+      },
+      "id": "60411c7c-881a-5834-b387-37c7aaaaa092",
+      "name": "KPI summary",
+      "type": "n8n-nodes-admaxxer.admaxxer",
+      "typeVersion": 1,
+      "position": [
+        220,
+        0
+      ],
+      "credentials": {
+        "admaxxerApi": {
+          "id": "",
+          "name": "Admaxxer account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "analytics",
+        "operation": "getAttribution",
+        "model": "last_click",
+        "options": {
+          "dateFrom": "={{ $now.minus({ days: 7 }).toISODate() }}",
+          "dateTo": "={{ $now.minus({ days: 1 }).toISODate() }}"
+        }
+      },
+      "id": "46dadf7b-03b1-5c5b-8cca-d8335be045e5",
+      "name": "Attribution",
+      "type": "n8n-nodes-admaxxer.admaxxer",
+      "typeVersion": 1,
+      "position": [
+        440,
+        0
+      ],
+      "credentials": {
+        "admaxxerApi": {
+          "id": "",
+          "name": "Admaxxer account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Every Monday": {
+      "main": [
+        [
+          {
+            "node": "KPI summary",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "KPI summary": {
+      "main": [
+        [
+          {
+            "node": "Attribution",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": false
+  }
+}
