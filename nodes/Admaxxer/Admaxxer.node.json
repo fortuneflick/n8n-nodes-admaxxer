@@ -1,0 +1,18 @@
+{
+	"node": "n8n-nodes-admaxxer.admaxxer",
+	"nodeVersion": "1.0",
+	"codexVersion": "1.0",
+	"categories": ["Analytics", "Marketing & Content"],
+	"resources": {
+		"credentialDocumentation": [
+			{
+				"url": "https://github.com/fortuneflick/n8n-nodes-admaxxer#credentials"
+			}
+		],
+		"primaryDocumentation": [
+			{
+				"url": "https://github.com/fortuneflick/n8n-nodes-admaxxer#readme"
+			}
+		]
+	}
+}
